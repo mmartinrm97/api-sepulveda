@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\v1\GoodController;
+use App\Http\Controllers\API\v1\GoodsClassController;
+use App\Http\Controllers\API\v1\GoodsGroupController;
 use App\Http\Controllers\API\v1\UserAuthController;
 use App\Http\Controllers\API\v1\UserController;
 use Illuminate\Http\Request;
@@ -24,3 +27,9 @@ Route::controller(UserAuthController::class)->group(function () {
 });
 
 Route::apiResource('users', UserController::class);
+
+Route::apiResource('goods-classes', GoodsClassController::class);
+
+Route::apiResource('goods-groups', GoodsGroupController::class);
+
+Route::apiResource('goods', GoodController::class);
