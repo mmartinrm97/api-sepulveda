@@ -9,9 +9,22 @@ class Good extends Model
 {
     use HasFactory;
 
+    public static array $relationships = ['goodsGroup','goodsClass','warehouse'];
+
     protected $fillable = [
         'description',
         'is_active',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'id' => 'string',
+        'created_at' => 'date:Y-m-d H:i:s',
+        'updated_at' => 'date:Y-m-d H:i:s',
     ];
 
     public function goodsClass(){
@@ -20,5 +33,9 @@ class Good extends Model
 
     public function goodsGroup(){
         return $this->belongsTo(GoodsGroup::class, 'goods_group_id');
+    }
+
+    public function warehouse(){
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
     }
 }

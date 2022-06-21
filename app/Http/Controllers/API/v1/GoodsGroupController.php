@@ -34,19 +34,19 @@ class GoodsGroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\GoodsGroup  $goodsGroup
-     * @return AnonymousResourceCollection
+     * @param GoodsGroup $goodsGroup
+     * @return GoodsGroupResource
      */
     public function show(GoodsGroup $goodsGroup)
     {
-        return GoodsGroupResource::collection($goodsGroup);
+        return GoodsGroupResource::make($goodsGroup);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\GoodsGroup  $goodsGroup
+     * @param GoodsGroup $goodsGroup
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, GoodsGroup $goodsGroup)
@@ -57,7 +57,7 @@ class GoodsGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\GoodsGroup  $goodsGroup
+     * @param GoodsGroup $goodsGroup
      * @return \Illuminate\Http\Response
      */
     public function destroy(GoodsGroup $goodsGroup)

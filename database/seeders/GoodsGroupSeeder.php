@@ -17,73 +17,59 @@ class GoodsGroupSeeder extends Seeder
     {
 
         GoodsGroup::factory()->create([
-            'description' => '04 AGRICOLA Y PESQUERO',
-            'is_active' => true
+            'description' => '04 AGRICOLA Y PESQUERO'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '11 AIRE ACONDICIONADO Y REFRIGERACION',
-            'is_active' => true
+            'description' => '11 AIRE ACONDICIONADO Y REFRIGERACION'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '18 ANIMALES',
-            'is_active' => true
+            'description' => '18 ANIMALES'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '25 ASEO Y LIMPIEZA',
-            'is_active' => true
+            'description' => '25 ASEO Y LIMPIEZA'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '32 COCINA Y COMEDOR',
-            'is_active' => true
+            'description' => '32 COCINA Y COMEDOR'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '39 CULTURA Y ARTE',
-            'is_active' => true
+            'description' => '39 CULTURA Y ARTE'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '46 ELECTRICIDAD Y ELECTRONICA',
-            'is_active' => true
+            'description' => '46 ELECTRICIDAD Y ELECTRONICA'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '53 HOSPITALIZACION',
-            'is_active' => true
+            'description' => '53 HOSPITALIZACION'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '60 INSTRUMENTO DE MEDICION',
-            'is_active' => true
+            'description' => '60 INSTRUMENTO DE MEDICION'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '67 MAQUINARIA, VEHICULOS Y OTROS',
-            'is_active' => true
+            'description' => '67 MAQUINARIA, VEHICULOS Y OTROS'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '74 OFICINA',
-            'is_active' => true
+            'description' => '74 OFICINA'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '81 RECREACION Y DEPORTE',
-            'is_active' => true
+            'description' => '81 RECREACION Y DEPORTE'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '88 SEGURIDAD INDUSTRIAL',
-            'is_active' => true
+            'description' => '88 SEGURIDAD INDUSTRIAL'
         ]);
 
         GoodsGroup::factory()->create([
-            'description' => '95 TELECOMUNICACIONES',
-            'is_active' => true
+            'description' => '95 TELECOMUNICACIONES'
         ]);
     }
 }

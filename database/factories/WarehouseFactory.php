@@ -17,7 +17,7 @@ class WarehouseFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'description' => 'Warehouse ' . $this->faker->unique()->company()
         ];
     }
 }

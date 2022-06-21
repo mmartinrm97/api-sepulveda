@@ -19,7 +19,7 @@ class GoodsGroupResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'description' => $this->resource->description,
-            'is_active' => $this->resource->is_active,
+            'is_active' => boolval($this->resource->is_active),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
 

@@ -16,52 +16,42 @@ class GoodsClassSeeder extends Seeder
     public function run()
     {
         GoodsClass::factory()->create([
-            'description' => '04 AERONAVE',
-            'is_active' => true
+            'description' => '04 AERONAVE'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '08 COMPUTO',
-            'is_active' => true
+            'description' => '08 COMPUTO'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '22 EQUIPO',
-            'is_active' => true
+            'description' => '22 EQUIPO'
         ]);
         GoodsClass::factory()->create([
-            'description' => '29 FERROCARRIL',
-            'is_active' => true
+            'description' => '29 FERROCARRIL'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '36 MAQUINARIA PESADA',
-            'is_active' => true
+            'description' => '36 MAQUINARIA PESADA'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '50 MAQUINA',
-            'is_active' => true
+            'description' => '50 MAQUINA'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '64 MOBILIARIO',
-            'is_active' => true
+            'description' => '64 MOBILIARIO'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '71 NAVE O ARTEFACTO NAVAL',
-            'is_active' => true
+            'description' => '71 NAVE O ARTEFACTO NAVAL'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '78 PRODUCCION Y SEGURIDAD',
-            'is_active' => true
+            'description' => '78 PRODUCCION Y SEGURIDAD'
         ]);
 
         GoodsClass::factory()->create([
-            'description' => '82 VEHICULO',
-            'is_active' => true
+            'description' => '82 VEHICULO'
         ]);
     }
 }

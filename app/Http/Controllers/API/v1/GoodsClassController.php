@@ -33,19 +33,19 @@ class GoodsClassController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\GoodsClass  $goodsClass
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @param GoodsClass $goodsClass
+     * @return GoodsClassResource
      */
-    public function show(GoodsClass $goodsClass)
+    public function show(GoodsClass $goodsClass): GoodsClassResource
     {
-        return GoodsClassResource::collection($goodsClass);
+        return GoodsClassResource::make($goodsClass);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\GoodsClass  $goodsClass
+     * @param GoodsClass $goodsClass
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, GoodsClass $goodsClass)
@@ -56,7 +56,7 @@ class GoodsClassController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\GoodsClass  $goodsClass
+     * @param GoodsClass $goodsClass
      * @return \Illuminate\Http\Response
      */
     public function destroy(GoodsClass $goodsClass)

@@ -5,6 +5,8 @@ use App\Http\Controllers\API\v1\GoodsClassController;
 use App\Http\Controllers\API\v1\GoodsGroupController;
 use App\Http\Controllers\API\v1\UserAuthController;
 use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\WarehouseController;
+use App\Http\Controllers\API\v2\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,11 +27,16 @@ Route::controller(UserAuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
 
 });
+Route::apiResource('roles', RoleController::class);
 
 Route::apiResource('users', UserController::class);
 
-Route::apiResource('goods-classes', GoodsClassController::class);
+Route::apiResource('warehouses', WarehouseController::class);
 
-Route::apiResource('goods-groups', GoodsGroupController::class);
+Route::apiResource('goods-classes', GoodsClassController::class)
+    ->parameters(['goods-classes'=>'goodsClass']);
+
+Route::apiResource('goods-groups', GoodsGroupController::class)
+    ->parameters(['goods-groups'=>'goodsGroup']);
 
 Route::apiResource('goods', GoodController::class);

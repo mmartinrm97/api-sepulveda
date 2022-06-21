@@ -14,14 +14,27 @@ use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @param Request $request
+     * @return JsonResponse|AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        return UserResource::collection(User::all());
+        $users = User::all();
+
+        if ($request->filled('include')) {
+            //Check Errors on includes
+            $errors = $this->checkRequestRelationshipErrors($request, User::$relationships);
+            if (!empty($errors['errors'])) {
+                return response()->json($errors, 422);
+            }
+            $this->setRequestRelationships($request, $users, User::$relationships);
+        }
+
+        return UserResource::collection($users);
     }
 
     /**
@@ -40,11 +53,22 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param User $user
-     * @return UserResource
+     * @return UserResource|JsonResponse
      */
-    public function show(User $user): UserResource
+    public function show(Request $request, User $user): JsonResponse|UserResource
     {
+        if ($request->filled('include')) {
+
+            //Check Errors on includes
+            $errors = $this->checkRequestRelationshipErrors($request, User::$relationships);
+            if (!empty($errors['errors'])) {
+                return response()->json($errors, 422);
+            }
+            $this->setRequestRelationships($request, $user, User::$relationships);
+        }
+
         return UserResource::make($user);
     }
 

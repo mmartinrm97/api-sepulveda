@@ -17,8 +17,6 @@ class GoodResource extends JsonResource
     public function toArray($request): array|\JsonSerializable|Arrayable
     {
 //        return parent::toArray($request);
-
-//        dd($this);
         return [
             'id' => $this->resource->id,
             'item' => $this->resource->item,
@@ -27,7 +25,8 @@ class GoodResource extends JsonResource
             'goods_group_id' => $this->resource->goods_group_id,
             'goods_class_id' => $this->resource->goods_class_id,
             'resolution' => $this->resource->resolution,
-            'is_active' => $this->resource->is_active,
+            'warehouse_id' => $this->resource->warehouse_id,
+            'is_active' => boolval($this->resource->is_active),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
 
@@ -36,10 +35,13 @@ class GoodResource extends JsonResource
             ],
 
             'goods_group' => $this->whenLoaded('goodsGroup',
-                fn() => GoodsGroupResource::make($this->goods_group)),
+                fn() => GoodsGroupResource::make($this->goodsGroup)),
 
             'goods_class' => $this->whenLoaded('goodsClass',
                 fn() => GoodsClassResource::make($this->goodsClass)),
+
+            'warehouse' => $this->whenLoaded('warehouse',
+                fn() => WarehouseResource::make($this->warehouse)),
         ];
     }
 }

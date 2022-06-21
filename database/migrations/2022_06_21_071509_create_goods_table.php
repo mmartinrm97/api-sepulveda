@@ -35,7 +35,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->string('resolution');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(false);
 
             $table->timestamps();
         });

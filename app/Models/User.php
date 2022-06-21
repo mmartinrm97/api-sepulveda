@@ -13,6 +13,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public static array $relationships = ['role','warehouses'];
     /**
      * The attributes that are mass assignable.
      *
@@ -40,7 +41,11 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [
+        'id' => 'string',
+        'role_id' => 'string',
         'email_verified_at' => 'datetime',
+        'created_at' => 'date:Y-m-d H:i:s',
+        'updated_at' => 'date:Y-m-d H:i:s',
     ];
 
     /**
@@ -61,5 +66,15 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    public function role(){
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function warehouses(){
+        return $this->belongsToMany(Warehouse::class,'user_warehouse')
+            ->withPivot(['is_active'])
+            ->withTimestamps();
     }
 }
