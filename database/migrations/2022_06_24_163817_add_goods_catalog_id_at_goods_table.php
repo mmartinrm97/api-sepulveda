@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('goods', function (Blueprint $table) {
-            $table->id();
-
-            $table->string('code');
-            $table->string('description');
-            $table->boolean('is_active')->default(false);
-
-            $table->timestamps();
+        Schema::table('goods', function (Blueprint $table) {
+            $table->foreignId('goods_catalog_id')
+                ->nullable()
+                ->after('description')
+                ->unsigned()
+                ->constrained('goods_catalogs')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goods');
+        //
     }
 };

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('goods', function (Blueprint $table) {
             $table->foreignId('warehouse_id')
                 ->nullable()
-                ->after('resolution')
+                ->after('description')
                 ->unsigned()
                 ->constrained('warehouses')
                 ->onUpdate('cascade')

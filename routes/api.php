@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\v1\GoodController;
+use App\Http\Controllers\API\v1\GoodsCatalogController;
 use App\Http\Controllers\API\v1\GoodsClassController;
 use App\Http\Controllers\API\v1\GoodsGroupController;
 use App\Http\Controllers\API\v1\UserAuthController;
@@ -31,12 +32,15 @@ Route::apiResource('roles', RoleController::class);
 
 Route::apiResource('users', UserController::class);
 
-Route::apiResource('warehouses', WarehouseController::class);
-
 Route::apiResource('goods-classes', GoodsClassController::class)
     ->parameters(['goods-classes'=>'goodsClass']);
 
 Route::apiResource('goods-groups', GoodsGroupController::class)
     ->parameters(['goods-groups'=>'goodsGroup']);
+
+Route::apiResource('goods-catalogs', GoodsCatalogController::class)
+    ->parameters(['goods-catalogs'=>'goodsCatalogs']);
+
+Route::apiResource('warehouses', WarehouseController::class);
 
 Route::apiResource('goods', GoodController::class);

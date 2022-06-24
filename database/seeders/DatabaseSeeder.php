@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             GoodsClassSeeder::class,
             GoodsGroupSeeder::class,
+            GoodsCatalogSeeder::class,
             WarehouseSeeder::class,
             GoodSeeder::class,
         ]);

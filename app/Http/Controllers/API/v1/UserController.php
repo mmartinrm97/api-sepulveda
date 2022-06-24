@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        $users = User::all();
+        $users = User::paginate(10);
 
         if ($request->filled('include')) {
             //Check Errors on includes
@@ -33,6 +33,7 @@ class UserController extends Controller
             }
             $this->setRequestRelationships($request, $users, User::$relationships);
         }
+
 
         return UserResource::collection($users);
     }
