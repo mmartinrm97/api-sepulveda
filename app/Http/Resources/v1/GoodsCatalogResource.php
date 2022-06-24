@@ -29,6 +29,12 @@ class GoodsCatalogResource extends JsonResource
             'links' => [
                 'self' => route('api.v1.goods-catalogs.show', $this->getRouteKey()),
             ],
+
+            'goods_group' => $this->whenLoaded('goodsGroup',
+                fn() => GoodsGroupResource::make($this->goodsGroup)),
+
+            'goods_class' => $this->whenLoaded('goodsClass',
+                fn() => GoodsClassResource::make($this->goodsClass)),
         ];
 
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\GoodsCatalogResource;
 use App\Http\Resources\v1\GoodsClassResource;
 use App\Models\GoodsCatalog;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -14,11 +15,22 @@ class GoodsCatalogController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return JsonResponse|AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return GoodsCatalogResource::collection(GoodsCatalog::paginate(10));
+        $goodsCatalogs = GoodsCatalog::paginate(10);
+
+        if ($request->filled('include')) {
+            //Check Errors on includes
+            $errors = $this->checkRequestRelationshipErrors($request, GoodsCatalog::$relationships);
+            if (!empty($errors['errors'])) {
+                return response()->json($errors, 422);
+            }
+            $this->setRequestRelationships($request, $goodsCatalogs, GoodsCatalog::$relationships);
+        }
+
+        return GoodsCatalogResource::collection($goodsCatalogs);
     }
 
     /**
