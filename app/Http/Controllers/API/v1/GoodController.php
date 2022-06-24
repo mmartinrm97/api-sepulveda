@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\GoodResource;
 use App\Models\Good;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -15,11 +16,11 @@ class GoodController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|AnonymousResourceCollection
+     * @return JsonResponse|AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        $goods = Good::all();
+        $goods = Good::paginate(10);
 
         if ($request->filled('include')) {
             //Check Errors on includes

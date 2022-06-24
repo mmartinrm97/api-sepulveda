@@ -17,7 +17,7 @@ class GoodsGroupController extends Controller
      */
     public function index()
     {
-        return GoodsGroupResource::collection(GoodsGroup::all());
+        return GoodsGroupResource::collection(GoodsGroup::paginate(10));
     }
 
     /**

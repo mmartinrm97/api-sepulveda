@@ -39,7 +39,7 @@ Route::apiResource('goods-groups', GoodsGroupController::class)
     ->parameters(['goods-groups'=>'goodsGroup']);
 
 Route::apiResource('goods-catalogs', GoodsCatalogController::class)
-    ->parameters(['goods-catalogs'=>'goodsCatalogs']);
+    ->parameters(['goods-catalogs'=>'goodsCatalog']);
 
 Route::apiResource('warehouses', WarehouseController::class);
 

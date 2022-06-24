@@ -19,7 +19,6 @@ class GoodResource extends JsonResource
 //        return parent::toArray($request);
         return [
             'id' => $this->resource->id,
-            'item' => $this->resource->item,
             'code' => $this->resource->code,
             'description' => $this->resource->description,
             'warehouse_id' => $this->resource->warehouse_id,

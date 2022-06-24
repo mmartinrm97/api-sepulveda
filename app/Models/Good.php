@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Good extends Model
 {
     use HasFactory;
 
-    public static array $relationships = ['goodsGroup','goodsClass','warehouse'];
+    public static array $relationships = ['warehouse'];
 
     protected $fillable = [
         'description',
@@ -27,15 +28,8 @@ class Good extends Model
         'updated_at' => 'date:Y-m-d H:i:s',
     ];
 
-    public function goodsClass(){
-        return $this->belongsTo(GoodsClass::class, 'goods_class_id');
-    }
-
-    public function goodsGroup(){
-        return $this->belongsTo(GoodsGroup::class, 'goods_group_id');
-    }
-
-    public function warehouse(){
+    public function warehouse(): BelongsTo
+    {
         return $this->belongsTo(Warehouse::class, 'warehouse_id');
     }
 }
