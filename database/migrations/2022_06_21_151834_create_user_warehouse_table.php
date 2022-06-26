@@ -31,7 +31,6 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->boolean('is_active')->default(false);
-
             $table->timestamps();
         });
     }

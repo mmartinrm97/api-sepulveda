@@ -18,8 +18,9 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $roleIDs = Role::pluck('id');
         return [
-            'role_id' => Role::inRandomOrder()->first()->id,
+            'role_id' => $roleIDs->random(),
             'first_name' => rand(0, 1) ?
                 $this->faker->firstName('male') . ' ' . $this->faker->firstName('male') :
                 $this->faker->firstName('female') . ' ' . $this->faker->firstName('female'),

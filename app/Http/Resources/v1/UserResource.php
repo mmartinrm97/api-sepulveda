@@ -25,9 +25,11 @@ class UserResource extends JsonResource
             'username' => $this->resource->username,
             'email' => $this->resource->email,
             'is_active' => boolval($this->resource->is_active),
-            'created_at' => $this->resource->created_at,
-            'updated_at' => $this->resource->updated_at,
-
+            'created_at' => $this->resource->created_at->toDayDateTimeString(),
+            'updated_at' => $this->resource->updated_at->toDayDateTimeString(),
+            'user_warehouse' => $this->whenPivotLoadedAs('user_warehouse','user_warehouse', function(){
+                return ['is_active' => boolval($this->resource->user_warehouse->is_active)];
+            },null),
 
             'links' => [
                 'self' => route('api.v1.users.show', $this->resource->getRouteKey()),

@@ -10,7 +10,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -23,7 +22,9 @@ class UserController extends Controller
      */
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        $users = User::paginate(10);
+        $users = User::query()->select();
+        $orderColumn = $request->input('order_column', 'created_at');
+        $orderDirection = $request->input('order_direction', 'asc');
 
         if ($request->filled('include')) {
             //Check Errors on includes
@@ -34,8 +35,31 @@ class UserController extends Controller
             $this->setRequestRelationships($request, $users, User::$relationships);
         }
 
+        if ($orderColumn != 'warehouses') {
+//            dd('es diferente a wh');
+            $users->orderBy($orderColumn, $orderDirection);
+        } else {
+//            dd('es wh');
+//            $users->with(['warehouses'=> function($q) use($orderDirection) {
+//                $q->orderBy('user_warehouse.is_active', $orderDirection);
+//            }]);
+            $users->withCount('warehouses')->orderBy('warehouses_count', $orderDirection);
+        }
 
-        return UserResource::collection($users);
+        $users->when($request->filled('search_is_active'), function ($query) use ($request) {
+            $query->where('is_active', $request->input('search_is_active'));
+        })
+            ->when($request->filled('search_id'), function ($query) use ($request) {
+                $query->where('id', $request->input('search_id'));
+            })
+            ->when($request->filled('search_first_name'), function ($query) use ($request) {
+                $query->where('first_name', 'LIKE','%'.$request->input('search_first_name').'%');
+            })
+            ->when($request->filled('search_last_name'), function ($query) use ($request) {
+                $query->where('last_name', 'LIKE', '%' . $request->input('search_last_name'). '%');
+            });
+
+        return UserResource::collection($users->paginate(5));
     }
 
     /**

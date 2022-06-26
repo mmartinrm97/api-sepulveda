@@ -20,11 +20,13 @@ class GoodFactory extends Factory
      */
     public function definition()
     {
+        $goodsCatalogIDs = GoodsCatalog::pluck('id');
+        $warehouseIDs = Warehouse::pluck('id');
         return [
             'code' =>  $this->faker->numberBetween(10000000,90000000),
             'description' => $this->faker->sentence(),
-            'goods_catalog_id' => GoodsCatalog::inRandomOrder()->first()->id,
-            'warehouse_id' => Warehouse::inRandomOrder()->first()->id,
+            'goods_catalog_id' => $goodsCatalogIDs->random(),
+            'warehouse_id' => $warehouseIDs->random(),
             'is_active' => rand(0,1),
         ];
     }

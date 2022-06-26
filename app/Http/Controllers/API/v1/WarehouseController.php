@@ -17,7 +17,7 @@ class WarehouseController extends Controller
      */
     public function index(Request $request)
     {
-        $warehouses = Warehouse::all();
+        $warehouses = Warehouse::query();
 
         if ($request->filled('include')) {
             //Check Errors on includes
@@ -28,7 +28,7 @@ class WarehouseController extends Controller
             $this->setRequestRelationships($request, $warehouses, Warehouse::$relationships);
         }
 
-        return WarehouseResource::collection($warehouses);
+        return WarehouseResource::collection($warehouses->paginate(5));
     }
 
     /**

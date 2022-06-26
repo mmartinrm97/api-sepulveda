@@ -22,7 +22,7 @@ class Controller extends BaseController
         $includes = $this->getRequestIncludes($request);
         foreach ($includes as $include) {
             collect($relationships)->map(function ($relationship) use ($models, $include) {
-                return $include === $relationship ? $models->load($relationship) : $models;
+                return $include === $relationship ? $models->with($relationship) : $models;
             });
         }
     }

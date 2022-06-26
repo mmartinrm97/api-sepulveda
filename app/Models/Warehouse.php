@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Warehouse extends Model
@@ -28,9 +29,14 @@ class Warehouse extends Model
         return $this->hasMany(Good::class, 'warehouse_id');
     }
 
-    public function users(){
+    public function users(): BelongsToMany
+    {
         return $this->belongsToMany(User::class,'user_warehouse')
             ->withPivot(['is_active'])
-            ->withTimestamps();
+            ->withTimestamps()
+            ->as('user_warehouse');
+    }
+    public function managers(){
+        return $this->wherePivot('is_active', 1);
     }
 }

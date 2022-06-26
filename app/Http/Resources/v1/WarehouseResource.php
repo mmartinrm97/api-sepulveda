@@ -21,6 +21,9 @@ class WarehouseResource extends JsonResource
             'is_active' => boolval($this->resource->is_active),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
+            'user_warehouse' => $this->whenPivotLoadedAs('user_warehouse','user_warehouse', function(){
+                return ['is_active' => ($this->resource->user_warehouse->is_active)];
+            },null),
 
             'links' => [
                 'self' => route('api.v1.warehouses.show', $this->getRouteKey()),
