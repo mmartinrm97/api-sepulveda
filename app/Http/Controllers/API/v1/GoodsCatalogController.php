@@ -19,7 +19,7 @@ class GoodsCatalogController extends Controller
      */
     public function index(Request $request)
     {
-        $goodsCatalogs = GoodsCatalog::paginate(10);
+        $goodsCatalogs = GoodsCatalog::query();
 
         if ($request->filled('include')) {
             //Check Errors on includes
@@ -30,7 +30,7 @@ class GoodsCatalogController extends Controller
             $this->setRequestRelationships($request, $goodsCatalogs, GoodsCatalog::$relationships);
         }
 
-        return GoodsCatalogResource::collection($goodsCatalogs);
+        return GoodsCatalogResource::collection($goodsCatalogs->paginate(5));
     }
 
     /**

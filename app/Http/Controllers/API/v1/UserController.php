@@ -50,7 +50,7 @@ class UserController extends Controller
             $query->where('is_active', $request->input('search_is_active'));
         })
             ->when($request->filled('search_id'), function ($query) use ($request) {
-                $query->where('id', $request->input('search_id'));
+                $query->where('id', 'LIKE','%'.$request->input('search_id').'%');
             })
             ->when($request->filled('search_first_name'), function ($query) use ($request) {
                 $query->where('first_name', 'LIKE','%'.$request->input('search_first_name').'%');
