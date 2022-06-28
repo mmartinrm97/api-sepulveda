@@ -46,17 +46,24 @@ class UserController extends Controller
             $users->withCount('warehouses')->orderBy('warehouses_count', $orderDirection);
         }
 
-        $users->when($request->filled('search_is_active'), function ($query) use ($request) {
+        $users->when($request->filled('search_global'), function ($query) use ($request) {
+            $query->where(function($query) use($request){
+                $query->where('id', 'LIKE', '%' . $request->input('search_global') . '%')
+                    ->orWhere('first_name', 'LIKE', '%' . $request->input('search_global') . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $request->input('search_global'));
+            });
+        })
+            ->when($request->filled('search_is_active'), function ($query) use ($request) {
             $query->where('is_active', $request->input('search_is_active'));
         })
             ->when($request->filled('search_id'), function ($query) use ($request) {
-                $query->where('id', 'LIKE','%'.$request->input('search_id').'%');
+                $query->where('id', 'LIKE', '%' . $request->input('search_id') . '%');
             })
             ->when($request->filled('search_first_name'), function ($query) use ($request) {
-                $query->where('first_name', 'LIKE','%'.$request->input('search_first_name').'%');
+                $query->where('first_name', 'LIKE', '%' . $request->input('search_first_name') . '%');
             })
             ->when($request->filled('search_last_name'), function ($query) use ($request) {
-                $query->where('last_name', 'LIKE', '%' . $request->input('search_last_name'). '%');
+                $query->where('last_name', 'LIKE', '%' . $request->input('search_last_name') . '%');
             });
 
         return UserResource::collection($users->paginate(5));

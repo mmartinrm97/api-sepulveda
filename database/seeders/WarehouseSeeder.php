@@ -15,15 +15,22 @@ class WarehouseSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::all()->pluck('id');
+        $users = User::all()->pluck('id')->toArray();
         Warehouse::factory(20)->create()->each(function ($warehouse) use (&$users) {
 
-            $userKeys = $users->random(rand(1,3));
-            foreach ($userKeys as $userKey) {
-                $warehouse->users()->attach(
-                    $userKey, ['is_active' => rand(0,1)]
-                );
-            }
+            $userKeys = array_rand($users);
+//            dd($userKeys);
+////            echo nl2br('userKey ' . $userKeys. '  ->  ');
+////            dd($userKeys);
+            unset($users[$userKeys]);
+            $warehouse->users()->attach(
+                $userKeys, ['is_active' => rand(0,1)]
+            );
+//            foreach ($userKeys as $userKey) {
+//                $warehouse->users()->attach(
+//                    $userKey, ['is_active' => rand(0,1)]
+//                );
+//            }
 
         });
     }
