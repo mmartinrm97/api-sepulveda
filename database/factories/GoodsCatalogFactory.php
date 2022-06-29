@@ -23,11 +23,11 @@ class GoodsCatalogFactory extends Factory
         return [
             'item' => $this->faker->numberBetween(1000,9000),
             'code' =>  $this->faker->numberBetween(10000000,90000000),
-            'denomination' => $this->faker->sentence(),
+            'denomination' => $this->faker->words(rand(3,5),true),
             'goods_group_id' => $goodsGroupIDs->random(),
             'goods_class_id' => $goodsClassIDs->random(),
             'resolution' => $this->faker->buildingNumber() . ' - ' . $this->faker->year() . '/SBN-GO',
-            'is_active' => rand(0,1),
+            'is_active' => true,
         ];
     }
 }

@@ -10,7 +10,7 @@ class Good extends Model
 {
     use HasFactory;
 
-    public static array $relationships = ['warehouse'];
+    public static array $relationships = ['warehouse', 'goodsCatalog'];
 
     protected $fillable = [
         'description',
@@ -31,5 +31,10 @@ class Good extends Model
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class, 'warehouse_id');
+    }
+
+    public function goodsCatalog(): BelongsTo
+    {
+        return $this->belongsTo(GoodsCatalog::class, 'goods_catalog_id');
     }
 }

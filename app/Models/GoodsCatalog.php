@@ -29,4 +29,8 @@ class GoodsCatalog extends Model
     public function goodsGroup(){
         return $this->belongsTo(GoodsGroup::class, 'goods_group_id');
     }
+
+    public function goods(){
+        return $this->hasMany(Good::class, 'goods_catalog_id');
+    }
 }

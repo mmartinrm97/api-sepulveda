@@ -17,7 +17,7 @@ class WarehouseFactory extends Factory
     public function definition()
     {
         return [
-            'description' => 'W. ' . strtoupper($this->faker->unique()->company()),
+            'description' => strtoupper($this->faker->unique()->company()),
             'is_active' => rand(0,1)
         ];
     }

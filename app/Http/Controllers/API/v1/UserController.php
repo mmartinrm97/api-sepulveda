@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        $users = User::query()->select();
+        $users = User::query();
         $orderColumn = $request->input('order_column', 'created_at');
         $orderDirection = $request->input('order_direction', 'asc');
 
@@ -35,6 +35,8 @@ class UserController extends Controller
             $this->setRequestRelationships($request, $users, User::$relationships);
         }
 
+
+        //Sort data
         if ($orderColumn != 'warehouses') {
 //            dd('es diferente a wh');
             $users->orderBy($orderColumn, $orderDirection);
@@ -66,7 +68,7 @@ class UserController extends Controller
                 $query->where('last_name', 'LIKE', '%' . $request->input('search_last_name') . '%');
             });
 
-        return UserResource::collection($users->paginate(5));
+        return UserResource::collection($users->paginate(10));
     }
 
     /**

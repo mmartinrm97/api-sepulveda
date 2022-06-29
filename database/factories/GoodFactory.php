@@ -24,7 +24,7 @@ class GoodFactory extends Factory
         $warehouseIDs = Warehouse::pluck('id');
         return [
             'code' =>  $this->faker->numberBetween(10000000,90000000),
-            'description' => $this->faker->sentence(),
+            'description' => $this->faker->words(rand(3,5),true),
             'goods_catalog_id' => $goodsCatalogIDs->random(),
             'warehouse_id' => $warehouseIDs->random(),
             'is_active' => rand(0,1),

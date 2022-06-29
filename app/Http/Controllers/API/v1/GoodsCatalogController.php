@@ -30,7 +30,7 @@ class GoodsCatalogController extends Controller
             $this->setRequestRelationships($request, $goodsCatalogs, GoodsCatalog::$relationships);
         }
 
-        return GoodsCatalogResource::collection($goodsCatalogs->paginate(5));
+        return GoodsCatalogResource::collection($goodsCatalogs->paginate(10));
     }
 
     /**

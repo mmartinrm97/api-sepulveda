@@ -31,11 +31,8 @@ class GoodResource extends JsonResource
                 'self' => route('api.v1.goods.show', $this->getRouteKey()),
             ],
 
-            'goods_group' => $this->whenLoaded('goodsGroup',
-                fn() => GoodsGroupResource::make($this->goodsGroup)),
-
-            'goods_class' => $this->whenLoaded('goodsClass',
-                fn() => GoodsClassResource::make($this->goodsClass)),
+            'goods_catalog' => $this->whenLoaded('goodsCatalog',
+                fn() => GoodsCatalogResource::make($this->goodsCatalog)),
 
             'warehouse' => $this->whenLoaded('warehouse',
                 fn() => WarehouseResource::make($this->warehouse)),

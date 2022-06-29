@@ -20,7 +20,9 @@ class GoodController extends Controller
      */
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        $goods = Good::paginate(10);
+        $goods = Good::query();
+        $orderColumn = $request->input('order_column', 'created_at');
+        $orderDirection = $request->input('order_direction', 'asc');
 
         if ($request->filled('include')) {
             //Check Errors on includes
@@ -30,8 +32,38 @@ class GoodController extends Controller
             }
             $this->setRequestRelationships($request, $goods, Good::$relationships);
         }
+        //Sort data
+        //Sort data
+        if ($orderColumn != 'warehouse_id') {
+//            dd('es diferente a wh');
+            $goods->orderBy($orderColumn, $orderDirection);
+        } else {
+            $goods->select('goods.*')
+                ->join('warehouses', 'warehouses.id','=','goods.warehouse_id')
+                ->orderBy('warehouses.description', $orderDirection);
+        }
 
-        return GoodResource::collection($goods);
+        $goods->when($request->filled('search_global'), function ($query) use ($request) {
+            $query->where(function($query) use($request){
+                $query->where('id', 'LIKE', '%' . $request->input('search_global') . '%')
+                    ->orWhere('code', 'LIKE', '%' . $request->input('search_global') . '%')
+                    ->orWhere('description', 'LIKE', '%' . $request->input('search_global'));
+            });
+        })
+            ->when($request->filled('search_is_active'), function ($query) use ($request) {
+                $query->where('is_active', $request->input('search_is_active'));
+            })
+            ->when($request->filled('search_id'), function ($query) use ($request) {
+                $query->where('id', 'LIKE', '%' . $request->input('search_id') . '%');
+            })
+            ->when($request->filled('search_code'), function ($query) use ($request) {
+                $query->where('code', 'LIKE', '%' . $request->input('search_code') . '%');
+            })
+            ->when($request->filled('search_description'), function ($query) use ($request) {
+                $query->where('description', 'LIKE', '%' . $request->input('search_description') . '%');
+            });
+
+        return GoodResource::collection($goods->paginate(10));
     }
 
     /**
