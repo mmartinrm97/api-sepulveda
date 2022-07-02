@@ -75,9 +75,9 @@ class GoodController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreGoodRequest $request
-     * @return GoodResource|JsonResponse
+     * @return JsonResponse
      */
-    public function store(StoreGoodRequest $request)
+    public function store(StoreGoodRequest $request): JsonResponse
     {
         try {
             DB::beginTransaction();
