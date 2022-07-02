@@ -13,7 +13,10 @@ class Good extends Model
     public static array $relationships = ['warehouse', 'goodsCatalog'];
 
     protected $fillable = [
+        'code',
         'description',
+        'warehouse_id',
+        'goods_catalog_id',
         'is_active',
     ];
 

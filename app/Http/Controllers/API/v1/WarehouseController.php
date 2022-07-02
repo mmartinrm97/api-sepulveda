@@ -31,6 +31,10 @@ class WarehouseController extends Controller
         return WarehouseResource::collection($warehouses->paginate(5));
     }
 
+    public function indexall(){
+        return response()->json(['data' => Warehouse::select('id', 'description')->get()]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

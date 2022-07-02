@@ -33,6 +33,14 @@ class GoodsCatalogController extends Controller
         return GoodsCatalogResource::collection($goodsCatalogs->paginate(10));
     }
 
+
+    public function indexAll()
+    {
+        return response()->json(['data' =>
+            GoodsCatalog::select('id','denomination')->get()
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

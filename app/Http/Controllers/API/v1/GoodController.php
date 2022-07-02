@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreGoodRequest;
+use App\Http\Requests\V1\UpdateGoodRequest;
 use App\Http\Resources\v1\GoodResource;
 use App\Models\Good;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class GoodController extends Controller
 {
@@ -21,7 +26,7 @@ class GoodController extends Controller
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
         $goods = Good::query();
-        $orderColumn = $request->input('order_column', 'created_at');
+        $orderColumn = $request->input('order_column', 'id');
         $orderDirection = $request->input('order_direction', 'asc');
 
         if ($request->filled('include')) {
@@ -39,12 +44,12 @@ class GoodController extends Controller
             $goods->orderBy($orderColumn, $orderDirection);
         } else {
             $goods->select('goods.*')
-                ->join('warehouses', 'warehouses.id','=','goods.warehouse_id')
+                ->join('warehouses', 'warehouses.id', '=', 'goods.warehouse_id')
                 ->orderBy('warehouses.description', $orderDirection);
         }
 
         $goods->when($request->filled('search_global'), function ($query) use ($request) {
-            $query->where(function($query) use($request){
+            $query->where(function ($query) use ($request) {
                 $query->where('id', 'LIKE', '%' . $request->input('search_global') . '%')
                     ->orWhere('code', 'LIKE', '%' . $request->input('search_global') . '%')
                     ->orWhere('description', 'LIKE', '%' . $request->input('search_global'));
@@ -69,18 +74,37 @@ class GoodController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreGoodRequest $request
+     * @return GoodResource|JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreGoodRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $good = Good::create($request->validated());
+            DB::commit();
+            return response()->json([
+                'data' => [
+                    'title' => 'Good created successfully',
+                    'product' => GoodResource::make($good)
+                ]
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => [
+                    'title' => 'Good creation failed',
+                    'details' => $e->getMessage()
+                ]
+            ], 422);
+        }
     }
+
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Good  $good
+     * @param Good $good
      * @return GoodResource
      */
     public function show(Request $request, Good $good)
@@ -94,23 +118,60 @@ class GoodController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Good  $good
-     * @return \Illuminate\Http\Response
+     * @param UpdateGoodRequest $request
+     * @param Good $good
+     * @return JsonResponse
      */
-    public function update(Request $request, Good $good)
+    public function update(UpdateGoodRequest $request, Good $good): JsonResponse
     {
-        //
+        try {
+            DB::beginTransaction();
+            $good->update($request->validated());
+            DB::commit();
+            return response()->json([
+                'data' => [
+                    'title' => 'Good updated successfully',
+                    'product' => GoodResource::make($good)
+                ]
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => [
+                    'title' => 'Good update failed',
+                    'details' => $e->getMessage()
+                ]
+            ], 422);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Good  $good
-     * @return \Illuminate\Http\Response
+     * @param Good $good
+     * @return JsonResponse
      */
     public function destroy(Good $good)
     {
-        //
+        try {
+            DB::beginTransaction();
+//            $good->warehouse()->Delete();
+//            $good->goodsCatalog()->delete();
+            $good->delete();
+            DB::commit();
+            return response()->json([
+                'data' => [
+                    'title' => 'Good deleted successfully'
+                ]
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => [
+                    'title' => 'Good delete failed',
+                    'details' => $e->getMessage()
+                ]
+            ], 422);
+        }
     }
 }

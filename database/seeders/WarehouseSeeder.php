@@ -16,7 +16,7 @@ class WarehouseSeeder extends Seeder
     public function run()
     {
         $users = User::all()->pluck('id')->toArray();
-        Warehouse::factory(20)->create()->each(function ($warehouse) use (&$users) {
+        Warehouse::factory(10)->create()->each(function ($warehouse) use (&$users) {
 
             $userKeys = array_rand($users);
 //            dd($userKeys);
@@ -24,7 +24,7 @@ class WarehouseSeeder extends Seeder
 ////            dd($userKeys);
             unset($users[$userKeys]);
             $warehouse->users()->attach(
-                $userKeys, ['is_active' => rand(0,1)]
+                ($userKeys+1), ['is_active' => rand(0,1)]
             );
 //            foreach ($userKeys as $userKey) {
 //                $warehouse->users()->attach(

@@ -38,9 +38,11 @@ Route::apiResource('goods-classes', GoodsClassController::class)
 Route::apiResource('goods-groups', GoodsGroupController::class)
     ->parameters(['goods-groups'=>'goodsGroup']);
 
+Route::get('goods-catalogs/all', [GoodsCatalogController::class, 'indexAll']);
 Route::apiResource('goods-catalogs', GoodsCatalogController::class)
     ->parameters(['goods-catalogs'=>'goodsCatalog']);
 
+Route::get('warehouses/all', [WarehouseController::class, 'indexAll']);
 Route::apiResource('warehouses', WarehouseController::class);
 
 Route::apiResource('goods', GoodController::class);
