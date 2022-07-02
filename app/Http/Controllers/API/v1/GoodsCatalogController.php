@@ -15,9 +15,10 @@ class GoodsCatalogController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return JsonResponse|AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
         $goodsCatalogs = GoodsCatalog::query();
 
