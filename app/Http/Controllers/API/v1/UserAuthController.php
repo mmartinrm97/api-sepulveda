@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\UserLoginRequest;
 use App\Http\Resources\v1\UserResource;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserAuthController extends Controller

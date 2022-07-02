@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\StoreGoodRequest;
-use App\Http\Requests\V1\UpdateGoodRequest;
+use App\Http\Requests\v1\StoreGoodRequest;
+use App\Http\Requests\v1\UpdateGoodRequest;
 use App\Http\Resources\v1\GoodResource;
 use App\Models\Good;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class GoodController extends Controller
