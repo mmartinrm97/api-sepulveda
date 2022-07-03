@@ -6,17 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\GoodsClassResource;
 use App\Models\GoodsClass;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GoodsClassController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return GoodsClassResource::collection(GoodsClass::paginate(10));
+        $goodsClasses = GoodsClass::query();
+        $orderColumn = $request->input('order_column', 'goods_classes.id');
+        $orderDirection = $request->input('order_direction', 'asc');
+
+        $goodsClasses->orderBy($orderColumn, $orderDirection);
+
+        $goodsClasses->when($request->filled('search_description'), function ($query) use ($request) {
+                $query->where('goods_classes.description', 'LIKE', '%' . $request->input('search_description') . '%');
+            });
+
+        return GoodsClassResource::collection($goodsClasses->paginate(10));
     }
 
     /**

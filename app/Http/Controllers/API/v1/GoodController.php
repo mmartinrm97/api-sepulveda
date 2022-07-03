@@ -25,7 +25,7 @@ class GoodController extends Controller
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
         $goods = Good::query();
-        $orderColumn = $request->input('order_column', 'id');
+        $orderColumn = $request->input('order_column', 'goods.id');
         $orderDirection = $request->input('order_direction', 'asc');
 
         if ($request->filled('include')) {
@@ -55,16 +55,16 @@ class GoodController extends Controller
             });
         })
             ->when($request->filled('search_is_active'), function ($query) use ($request) {
-                $query->where('is_active', $request->input('search_is_active'));
+                $query->where('goods.is_active', $request->input('search_is_active'));
             })
             ->when($request->filled('search_id'), function ($query) use ($request) {
-                $query->where('id', 'LIKE', '%' . $request->input('search_id') . '%');
+                $query->where('goods.id', 'LIKE', '%' . $request->input('search_id') . '%');
             })
             ->when($request->filled('search_code'), function ($query) use ($request) {
-                $query->where('code', 'LIKE', '%' . $request->input('search_code') . '%');
+                $query->where('goods.code', 'LIKE', '%' . $request->input('search_code') . '%');
             })
             ->when($request->filled('search_description'), function ($query) use ($request) {
-                $query->where('description', 'LIKE', '%' . $request->input('search_description') . '%');
+                $query->where('goods.description', 'LIKE', '%' . $request->input('search_description') . '%');
             });
 
         return GoodResource::collection($goods->paginate(10));

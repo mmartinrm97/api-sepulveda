@@ -15,9 +15,19 @@ class GoodsGroupController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return GoodsGroupResource::collection(GoodsGroup::paginate(10));
+        $goodsGroups = GoodsGroup::query();
+        $orderColumn = $request->input('order_column', 'goods_groups.id');
+        $orderDirection = $request->input('order_direction', 'asc');
+
+        $goodsGroups->orderBy($orderColumn, $orderDirection);
+
+        $goodsGroups->when($request->filled('search_description'), function ($query) use ($request) {
+            $query->where('goods_groups.description', 'LIKE', '%' . $request->input('search_description') . '%');
+        });
+
+        return GoodsGroupResource::collection($goodsGroups->paginate(10));
     }
 
     /**

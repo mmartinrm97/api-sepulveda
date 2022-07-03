@@ -21,6 +21,8 @@ class GoodsCatalogController extends Controller
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
         $goodsCatalogs = GoodsCatalog::query();
+        $orderColumn = $request->input('order_column', 'goods_catalogs.id');
+        $orderDirection = $request->input('order_direction', 'asc');
 
         if ($request->filled('include')) {
             //Check Errors on includes
@@ -30,6 +32,15 @@ class GoodsCatalogController extends Controller
             }
             $this->setRequestRelationships($request, $goodsCatalogs, GoodsCatalog::$relationships);
         }
+
+        $goodsCatalogs->orderBy($orderColumn, $orderDirection);
+
+        $goodsCatalogs->when($request->filled('search_code'), function ($query) use ($request) {
+            $query->where('goods_catalogs.code', 'LIKE', '%' . $request->input('search_code') . '%');
+        })
+            ->when($request->filled('search_denomination'), function ($query) use ($request) {
+                $query->where('goods_catalogs.denomination', 'LIKE', '%' . $request->input('search_denomination') . '%');
+            });
 
         return GoodsCatalogResource::collection($goodsCatalogs->paginate(10));
     }
