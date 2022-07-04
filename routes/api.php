@@ -30,7 +30,9 @@ Route::controller(UserAuthController::class)->group(function () {
 });
 Route::apiResource('roles', RoleController::class);
 
+Route::get('users/all', [UserController::class, 'indexAll']);
 Route::apiResource('users', UserController::class);
+
 
 Route::apiResource('goods-classes', GoodsClassController::class)
     ->parameters(['goods-classes'=>'goodsClass']);
@@ -38,11 +40,14 @@ Route::apiResource('goods-classes', GoodsClassController::class)
 Route::apiResource('goods-groups', GoodsGroupController::class)
     ->parameters(['goods-groups'=>'goodsGroup']);
 
+
 Route::get('goods-catalogs/all', [GoodsCatalogController::class, 'indexAll']);
 Route::apiResource('goods-catalogs', GoodsCatalogController::class)
     ->parameters(['goods-catalogs'=>'goodsCatalog']);
 
+
 Route::get('warehouses/all', [WarehouseController::class, 'indexAll']);
 Route::apiResource('warehouses', WarehouseController::class);
+
 
 Route::apiResource('goods', GoodController::class);

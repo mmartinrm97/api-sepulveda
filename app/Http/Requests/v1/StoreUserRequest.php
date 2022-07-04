@@ -31,6 +31,7 @@ class StoreUserRequest extends FormRequest
             'dni' => 'required|string|size:8',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'is_active' => 'required|boolean'
 
         ];
     }
@@ -38,12 +39,13 @@ class StoreUserRequest extends FormRequest
     public function attributes()
     {
         return [
-            'role_id' => 'rol',
-            'first_name' => 'nombres',
-            'last_name' => 'apellidos',
-            'dni' => 'dni',
-            'email' => 'email',
-            'password' => 'contraseña'
+            'role_id' => 'Rol',
+            'first_name' => 'Nombres',
+            'last_name' => 'Apellidos',
+            'dni' => 'DNI',
+            'email' => 'Email',
+            'password' => 'Contraseña',
+            'is_active' => 'Activo'
         ];
     }
 }

@@ -74,6 +74,21 @@ class UserController extends Controller
         return UserResource::collection($users->paginate(10));
     }
 
+    public function indexAll(Request $request){
+        $users = User::query();
+        $users->select('id','first_name','last_name');
+        if($request->filled('users_without_warehouses') &&
+            $request->input('users_without_warehouses')){
+            $users->whereDoesntHave('warehouses', function($query){
+            });
+        }
+
+        $users->withCount('warehouses');
+
+        $users->orderBy('last_name');
+        return response()->json(['data' => $users->get()]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -84,9 +99,6 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            if($request->input('password') === ''){
-                dd('password vació');
-            }
             $user = User::create($request->validated());
             DB::commit();
             return response()->json([

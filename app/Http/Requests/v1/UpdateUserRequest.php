@@ -32,6 +32,22 @@ class UpdateUserRequest extends FormRequest
             'email' => ['string','email','max:255',
                 Rule::unique('users','email')->ignore($this->route('user'))],
             'password' => 'sometimes|string|min:6|confirmed',
+            'is_active' => 'boolean'
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'role_id' => 'Rol',
+            'first_name' => 'Nombres',
+            'last_name' => 'Apellidos',
+            'dni' => 'DNI',
+            'email' => 'Email',
+            'password' => 'Contraseña',
+            'is_active' => 'Activo'
+        ];
+    }
+
+
 }

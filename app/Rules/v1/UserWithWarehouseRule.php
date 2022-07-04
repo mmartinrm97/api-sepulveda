@@ -26,14 +26,16 @@ class UserWithWarehouseRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $user = User::find($value);
+        $user = User::findOrFail($value);
         $warehouse = request()->route('warehouse');
 
-        foreach ($warehouse->users as $userWarehouse){
-            if($userWarehouse->id === $user->id){
-                return true;
-            }
-        }
+       if($warehouse !== null){
+           foreach ($warehouse->users as $userWarehouse){
+               if($userWarehouse->id === $user->id){
+                   return true;
+               }
+           }
+       }
 
         if ($user->warehouses()->exists()) {
             return false;

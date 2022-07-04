@@ -8,6 +8,7 @@ use App\Http\Requests\v1\UpdateWarehouseRequest;
 use App\Http\Resources\v1\WarehouseResource;
 use App\Models\Warehouse;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class WarehouseController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse|AnonymousResourceCollection
+     * @return JsonResponse|AnonymousResourceCollection
      */
     public function index(Request $request)
     {
@@ -59,7 +60,7 @@ class WarehouseController extends Controller
         return WarehouseResource::collection($warehouses->paginate(10));
     }
 
-    public function indexall(){
+    public function indexAll(){
         return response()->json(['data' => Warehouse::select('id', 'description')->get()]);
     }
 
@@ -67,7 +68,7 @@ class WarehouseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(StoreWarehouseRequest $request)
     {
@@ -98,7 +99,7 @@ class WarehouseController extends Controller
      * Display the specified resource.
      *
      * @param Warehouse $warehouse
-     * @return WarehouseResource|\Illuminate\Http\JsonResponse
+     * @return WarehouseResource|JsonResponse
      */
     public function show(Request $request, Warehouse $warehouse)
     {
@@ -119,7 +120,7 @@ class WarehouseController extends Controller
      *
      * @param UpdateWarehouseRequest $request
      * @param Warehouse $warehouse
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(UpdateWarehouseRequest $request, Warehouse $warehouse)
     {
@@ -150,10 +151,15 @@ class WarehouseController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Warehouse $warehouse
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy(Warehouse $warehouse)
     {
-        //
+        $warehouse->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Warehouse deleted successfully',
+        ]);
     }
 }
