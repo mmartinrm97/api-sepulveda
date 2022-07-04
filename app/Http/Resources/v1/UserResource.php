@@ -22,7 +22,6 @@ class UserResource extends JsonResource
             'first_name' => $this->resource->first_name,
             'last_name' => $this->resource->last_name,
             'dni' => $this->resource->dni,
-            'username' => $this->resource->username,
             'email' => $this->resource->email,
             'is_active' => boolval($this->resource->is_active),
             'created_at' => $this->resource->created_at->toDayDateTimeString(),

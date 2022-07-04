@@ -13,6 +13,11 @@ class Warehouse extends Model
 
     public static array $relationships = ['users', 'goods'];
 
+    protected $fillable = [
+        'description',
+        'is_active',
+    ];
+
     /**
      * The attributes that should be cast.
      *

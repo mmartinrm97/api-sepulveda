@@ -25,7 +25,8 @@ class UpdateGoodRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => ['string', Rule::unique('goods', 'code')->ignore($this->route('good'))],
+            'code' => ['string',
+                Rule::unique('goods', 'code')->ignore($this->route('good'))],
             'description' => 'string',
             'warehouse_id' => 'exists:warehouses,id',
             'goods_catalog_id' => 'exists:goods_catalogs,id',

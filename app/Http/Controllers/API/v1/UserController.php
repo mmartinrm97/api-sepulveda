@@ -7,9 +7,11 @@ use App\Http\Requests\v1\StoreUserRequest;
 use App\Http\Requests\v1\UpdateUserRequest;
 use App\Http\Resources\v1\UserResource;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -23,7 +25,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse|AnonymousResourceCollection
     {
         $users = User::query();
-        $orderColumn = $request->input('order_column', 'created_at');
+        $orderColumn = $request->input('order_column', 'id');
         $orderDirection = $request->input('order_direction', 'asc');
 
         if ($request->filled('include')) {
@@ -76,13 +78,32 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreUserRequest $request
-     * @return UserResource
+     * @return JsonResponse
      */
-    public function store(StoreUserRequest $request): UserResource
+    public function store(StoreUserRequest $request): JsonResponse
     {
-        $user = User::create($request->validated());
-
-        return UserResource::make($user);
+        try {
+            DB::beginTransaction();
+            if($request->input('password') === ''){
+                dd('password vació');
+            }
+            $user = User::create($request->validated());
+            DB::commit();
+            return response()->json([
+                'data' => [
+                    'title' => 'User created successfully',
+                    'product' => UserResource::make($user)
+                ]
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => [
+                    'title' => 'User creation failed',
+                    'details' => $e->getMessage()
+                ]
+            ], 422);
+        }
     }
 
     /**

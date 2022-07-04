@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\StoreWarehouseRequest;
+use App\Http\Requests\v1\UpdateWarehouseRequest;
 use App\Http\Resources\v1\WarehouseResource;
 use App\Models\Warehouse;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseController extends Controller
 {
@@ -63,11 +67,31 @@ class WarehouseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreWarehouseRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $warehouse = Warehouse::create($request->validated());
+            $warehouse->users()->attach($request->input('user_id'), ['is_active' => true]);
+            DB::commit();
+            $warehouse->load('users');
+            return response()->json([
+                'data' => [
+                    'title' => 'Warehouse created successfully',
+                    'warehouse' => WarehouseResource::make($warehouse)
+                ]
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => [
+                    'title' => 'Warehouse creation failed',
+                    'details' => $e->getMessage()
+                ]
+            ], 422);
+        }
     }
 
     /**
@@ -93,13 +117,33 @@ class WarehouseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param UpdateWarehouseRequest $request
      * @param Warehouse $warehouse
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Warehouse $warehouse)
+    public function update(UpdateWarehouseRequest $request, Warehouse $warehouse)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $warehouse->update($request->validated());
+            $warehouse->users()->sync($request->input('user_id'), ['is_active' => true]);
+            DB::commit();
+            $warehouse->load('users');
+            return response()->json([
+                'data' => [
+                    'title' => 'Warehouse updated successfully',
+                    'warehouse' => WarehouseResource::make($warehouse)
+                ]
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => [
+                    'title' => 'Warehouse updated failed',
+                    'details' => $e->getMessage()
+                ]
+            ], 422);
+        }
     }
 
     /**

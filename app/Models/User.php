@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
@@ -22,10 +23,22 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'role_id',
+        'first_name',
+        'last_name',
+        'dni',
+        'username',
         'email',
         'password',
     ];
+
+    public function setPasswordAttribute($password){
+
+        if(trim($password) === ''){
+            return ;
+        }
+        $this->attributes['password'] = Hash::make($password);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

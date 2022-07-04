@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\v1;
 
+use App\Rules\v1\UserWithWarehouseRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends FormRequest
+class StoreWarehouseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,9 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_id' => 'exists:roles,id',
-            'first_name' => 'string',
-            'last_name' => 'string',
-            'dni' => 'string',
-            'email' => ['string','email','max:255',
-                Rule::unique('users','email')->ignore($this->route('user'))],
-            'password' => 'sometimes|string|min:6|confirmed',
+            'description' => 'required|string|unique:warehouses,description',
+            'user_id' => ['required','exists:users,id', new UserWithWarehouseRule()],
+            'is_active' => 'required|boolean'
         ];
     }
 }

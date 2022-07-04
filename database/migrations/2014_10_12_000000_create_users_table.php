@@ -18,11 +18,9 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('dni',8);
-            $table->string('username');
             $table->string('password');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-
             $table->boolean('is_active')->default(false);
             $table->rememberToken();
             $table->timestamps();
