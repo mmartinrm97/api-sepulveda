@@ -19,11 +19,11 @@ class WarehouseResource extends JsonResource
             'id' => $this->resource->id,
             'description' => $this->resource->description,
             'is_active' => boolval($this->resource->is_active),
-            'created_at' => $this->resource->created_at,
-            'updated_at' => $this->resource->updated_at,
-            'user_warehouse' => $this->whenPivotLoadedAs('user_warehouse','user_warehouse', function(){
-                return ['is_active' => ($this->resource->user_warehouse->is_active)];
-            },null),
+            'created_at' => $this->resource->created_at->toDayDateTimeString(),
+            'updated_at' => $this->resource->updated_at->toDayDateTimeString(),
+            'user_warehouse_pivot' => $this->whenPivotLoadedAs('user_warehouse','user_warehouse', function(){
+                return ['is_active' => boolval($this->resource->user_warehouse->is_active)];
+            }),
 
             'links' => [
                 'self' => route('api.v1.warehouses.show', $this->getRouteKey()),

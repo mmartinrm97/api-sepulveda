@@ -42,10 +42,11 @@ class UserController extends Controller
             $users->orderBy($orderColumn, $orderDirection);
         } else {
 //            dd('es wh');
-//            $users->with(['warehouses'=> function($q) use($orderDirection) {
-//                $q->orderBy('user_warehouse.is_active', $orderDirection);
-//            }]);
+//            $users->whereHas('warehouses', function($q) use($orderDirection) {
+//                $q->orderBy('warehouses.description', $orderDirection);
+//            });
             $users->withCount('warehouses')->orderBy('warehouses_count', $orderDirection);
+
         }
 
         $users->when($request->filled('search_global'), function ($query) use ($request) {

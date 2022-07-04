@@ -19,6 +19,9 @@ class WarehouseController extends Controller
     {
         $warehouses = Warehouse::query();
 
+        $orderColumn = $request->input('order_column', 'warehouses.id');
+        $orderDirection = $request->input('order_direction', 'asc');
+
         if ($request->filled('include')) {
             //Check Errors on includes
             $errors = $this->checkRequestRelationshipErrors($request, Warehouse::$relationships);
@@ -26,6 +29,27 @@ class WarehouseController extends Controller
                 return response()->json($errors, 422);
             }
             $this->setRequestRelationships($request, $warehouses, Warehouse::$relationships);
+        }
+
+        $warehouses->orderBy($orderColumn, $orderDirection);
+
+        $warehouses->when($request->filled('search_is_active'), function ($query) use ($request) {
+            $query->where('warehouses.is_active', $request->input('search_is_active'));
+        })
+            ->when($request->filled('search_id'), function ($query) use ($request) {
+                $query->where('warehouses.id', 'LIKE', '%' . $request->input('search_id') . '%');
+            })
+            ->when($request->filled('search_description'), function ($query) use ($request) {
+                $query->where('warehouses.description', 'LIKE', '%' . $request->input('search_description') . '%');
+            });
+
+        if($request->filled('search_user')){
+            $warehouses->whereHas('users', function($query) use($request){
+                $query->where('first_name', 'like', '%'. $request->input('search_user'). '%');
+            });
+//            ->when($request->filled('search_user'), function ($query) use ($request) {
+//                    $query->where('users.description', 'LIKE', '%' . $request->input('search_user') . '%');
+//                })
         }
 
         return WarehouseResource::collection($warehouses->paginate(10));
