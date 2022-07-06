@@ -16,7 +16,7 @@ class WarehouseSeeder extends Seeder
     public function run()
     {
         $users = User::all()->pluck('id')->toArray();
-        Warehouse::factory(15)->create()->each(function ($warehouse) use (&$users) {
+        Warehouse::factory(5)->create()->each(function ($warehouse) use (&$users) {
 
             $userKeys = array_rand($users);
 //            dd($userKeys);

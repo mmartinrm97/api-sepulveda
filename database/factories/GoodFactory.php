@@ -24,9 +24,18 @@ class GoodFactory extends Factory
         $warehouseIDs = Warehouse::pluck('id');
         return [
             'code' =>  $this->faker->numberBetween(10000000,90000000),
-            'description' => $this->faker->words(rand(3,5),true),
+            'description' => $this->faker->words(rand(2,4),true),
+            'trademark' => $this->faker->word(),
+            'model' => $this->faker->word(),
+            'type' => $this->faker->word(),
+            'color' => $this->faker->safeColorName(),
+            'series' => $this->faker->hexcolor(),
+            'state_of_conservation' => $this->faker->randomElement(['A','B','C']),
+            'date_acquired' => $this->faker->dateTimeInInterval(),
+            'value' => $this->faker->randomFloat(1, 10, 500),
             'goods_catalog_id' => $goodsCatalogIDs->random(),
             'warehouse_id' => $warehouseIDs->random(),
+            'observations' =>'MED',
             'is_active' => rand(0,1),
         ];
     }

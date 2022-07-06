@@ -5,13 +5,16 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreGoodRequest;
 use App\Http\Requests\v1\UpdateGoodRequest;
+use App\Http\Resources\v1\GoodPDFResource;
 use App\Http\Resources\v1\GoodResource;
 use App\Models\Good;
+use App\Models\Warehouse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GoodController extends Controller
 {
@@ -57,6 +60,9 @@ class GoodController extends Controller
             ->when($request->filled('search_is_active'), function ($query) use ($request) {
                 $query->where('goods.is_active', $request->input('search_is_active'));
             })
+            ->when($request->filled('search_warehouse'), function ($query) use ($request) {
+                $query->where('goods.warehouse_id', $request->input('search_warehouse'));
+            })
             ->when($request->filled('search_id'), function ($query) use ($request) {
                 $query->where('goods.id', 'LIKE', '%' . $request->input('search_id') . '%');
             })
@@ -68,6 +74,45 @@ class GoodController extends Controller
             });
 
         return GoodResource::collection($goods->paginate(10));
+    }
+
+
+    public function indexBulk(Request $request)
+    {
+//
+//        $goods->when($request->filled('search_warehouse'), function ($query) use ($request) {
+//            $query->where('goods.warehouse_id', $request->input('search_warehouse'));
+//        });
+//
+//        $goods->select('goods.*')
+//            ->join('warehouses', 'warehouses.id', '=', 'goods.warehouse_id')
+//            ->orderBy('warehouses.description');
+//
+//        return GoodPDFResource::collection($goods->get());
+
+        $warehouses = Warehouse::query();
+
+        $warehouses->when($request->filled('search_warehouse_id'), function ($query) use ($request) {
+            $query->where('warehouses.id', $request->input('search_warehouse_id'));
+        });
+
+        $warehouses->with([
+            'goods' =>[
+                'goodsCatalog'
+            ],
+            'users'
+        ]);
+
+
+
+        $data = [
+            'titulo' => 'Styde.net',
+            'warehouses' => $warehouses->get()
+        ];
+
+        return PDF::loadView('reports.reporte', $data)
+            ->setPaper('a4', 'landscape')
+            ->stream('archivo.pdf');
     }
 
     /**

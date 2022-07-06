@@ -49,5 +49,5 @@ Route::apiResource('goods-catalogs', GoodsCatalogController::class)
 Route::get('warehouses/all', [WarehouseController::class, 'indexAll']);
 Route::apiResource('warehouses', WarehouseController::class);
 
-
+Route::get('reports/generate-reports', [GoodController::class, 'indexBulk']);
 Route::apiResource('goods', GoodController::class);
