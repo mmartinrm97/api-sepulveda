@@ -97,12 +97,18 @@ class GoodController extends Controller
         });
 
         $warehouses->with([
-            'goods' =>[
-                'goodsCatalog'
-            ],
-            'users'
+            'goods' => function($goodQuery){
+                $goodQuery->select(['id','description','warehouse_id','goods_catalog_id',
+                    'trademark','model','type','color','series','state_of_conservation','date_acquired','value',
+                    'observations']);
+                $goodQuery->with(['goodsCatalog' => function ($goodsCatalogQuery){
+                    $goodsCatalogQuery->select('id','code');
+                }]);
+            },
+            'users'=> function ($userQuery){
+                $userQuery->select('users.id','first_name','last_name');
+            }
         ]);
-
 
 
         $data = [
