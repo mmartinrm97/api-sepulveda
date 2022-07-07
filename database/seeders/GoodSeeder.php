@@ -15,6 +15,6 @@ class GoodSeeder extends Seeder
      */
     public function run()
     {
-        Good::factory(300)->create();
+        Good::factory(1000)->create();
     }
 }
