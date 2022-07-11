@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreGoodRequest;
 use App\Http\Requests\v1\UpdateGoodRequest;
-use App\Http\Resources\v1\GoodPDFResource;
 use App\Http\Resources\v1\GoodResource;
 use App\Models\Good;
 use App\Models\Warehouse;
@@ -76,52 +75,8 @@ class GoodController extends Controller
         return GoodResource::collection($goods->paginate(10));
     }
 
-
-    public function generateReport(Request $request)
+    public function list(Request $request): JsonResponse|AnonymousResourceCollection
     {
-//
-//        $goods->when($request->filled('search_warehouse'), function ($query) use ($request) {
-//            $query->where('goods.warehouse_id', $request->input('search_warehouse'));
-//        });
-//
-//        $goods->select('goods.*')
-//            ->join('warehouses', 'warehouses.id', '=', 'goods.warehouse_id')
-//            ->orderBy('warehouses.description');
-//
-//        return GoodPDFResource::collection($goods->get());
-
-        $warehouses = Warehouse::query();
-
-        $warehouses->when($request->filled('search_warehouse_id'), function ($query) use ($request) {
-            $query->where('warehouses.id', $request->input('search_warehouse_id'));
-        });
-
-        $warehouses->with([
-            'goods' => function($goodQuery){
-                $goodQuery->select(['id','description','warehouse_id','goods_catalog_id',
-                    'trademark','model','type','color','series','state_of_conservation','date_acquired','value',
-                    'observations']);
-                $goodQuery->with(['goodsCatalog' => function ($goodsCatalogQuery){
-                    $goodsCatalogQuery->select('id','code');
-                }]);
-            },
-            'users'=> function ($userQuery){
-                $userQuery->select('users.id','first_name','last_name');
-            }
-        ]);
-
-
-        $data = [
-            'titulo' => 'Styde.net',
-            'warehouses' => $warehouses->get()
-        ];
-
-        return PDF::loadView('reports.reporte', $data)
-            ->setPaper('a4', 'landscape')
-            ->stream('archivo.pdf');
-    }
-
-    public function indexBulk(Request $request){
         $goods = Good::query();
         $orderColumn = $request->input('order_column', 'goods.id');
         $orderDirection = $request->input('order_direction', 'asc');
@@ -204,10 +159,11 @@ class GoodController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param Good $good
      * @return GoodResource
      */
-    public function show(Request $request, Good $good)
+    public function show(Request $request, Good $good): GoodResource
     {
 
         $this->setRequestRelationships($request, $good, Good::$relationships);
@@ -273,5 +229,53 @@ class GoodController extends Controller
                 ]
             ], 422);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function generateReport(Request $request): \Illuminate\Http\Response
+    {
+//
+//        $goods->when($request->filled('search_warehouse'), function ($query) use ($request) {
+//            $query->where('goods.warehouse_id', $request->input('search_warehouse'));
+//        });
+//
+//        $goods->select('goods.*')
+//            ->join('warehouses', 'warehouses.id', '=', 'goods.warehouse_id')
+//            ->orderBy('warehouses.description');
+//
+//        return GoodPDFResource::collection($goods->get());
+
+        $warehouses = Warehouse::query();
+
+        $warehouses->when($request->filled('search_warehouse_id'), function ($query) use ($request) {
+            $query->where('warehouses.id', $request->input('search_warehouse_id'));
+        });
+
+        $warehouses->with([
+            'goods' => function($goodQuery){
+                $goodQuery->select(['id','description','warehouse_id','goods_catalog_id',
+                    'trademark','model','type','color','series','state_of_conservation','date_acquired','value',
+                    'observations']);
+                $goodQuery->with(['goodsCatalog' => function ($goodsCatalogQuery){
+                    $goodsCatalogQuery->select('id','code');
+                }]);
+            },
+            'users'=> function ($userQuery){
+                $userQuery->select('users.id','first_name','last_name');
+            }
+        ]);
+
+
+        $data = [
+            'titulo' => 'Styde.net',
+            'warehouses' => $warehouses->get()
+        ];
+
+        return PDF::loadView('reports.reporte', $data)
+            ->setPaper('a4', 'landscape')
+            ->stream('archivo.pdf');
     }
 }

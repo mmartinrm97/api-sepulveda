@@ -35,7 +35,8 @@ class UserAuthController extends Controller
             'authorization' => [
                 'token' => $token,
                 'type' => 'bearer',
-                'user' => UserResource::make($user)
+                'expires_in' => Auth::factory()->getTTL(),
+                'user' => UserResource::make($user),
             ]
         ]);
 
@@ -55,7 +56,7 @@ class UserAuthController extends Controller
         return response()->json([
             'status' => 'success',
             'user' => Auth::user(),
-            'authorisation' => [
+            'authorization' => [
                 'token' => Auth::refresh(),
                 'type' => 'bearer',
             ]

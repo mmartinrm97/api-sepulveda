@@ -74,7 +74,9 @@ class UserController extends Controller
         return UserResource::collection($users->paginate(10));
     }
 
-    public function indexAll(Request $request){
+
+    public function list(Request $request): JsonResponse
+    {
         $users = User::query();
         $users->select('id','first_name','last_name');
         if($request->filled('users_without_warehouses') &&
@@ -86,6 +88,7 @@ class UserController extends Controller
         $users->withCount('warehouses');
 
         $users->orderBy('last_name');
+
         return response()->json(['data' => $users->get()]);
     }
 

@@ -46,7 +46,7 @@ class GoodsCatalogController extends Controller
     }
 
 
-    public function indexAll()
+    public function list(): JsonResponse
     {
         return response()->json(['data' =>
             GoodsCatalog::select('id','denomination')->get()
