@@ -256,7 +256,7 @@ class GoodController extends Controller
 
         $warehouses->with([
             'goods' => function($goodQuery){
-                $goodQuery->select(['id','description','warehouse_id','goods_catalog_id',
+                $goodQuery->select(['id','description','warehouse_id','goods_catalog_id', 'code',
                     'trademark','model','type','color','series','state_of_conservation','date_acquired','value',
                     'observations']);
                 $goodQuery->with(['goodsCatalog' => function ($goodsCatalogQuery){

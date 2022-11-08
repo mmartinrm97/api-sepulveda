@@ -15,6 +15,6 @@ class GoodsCatalogSeeder extends Seeder
      */
     public function run()
     {
-        GoodsCatalog::factory(20)->create();
+        GoodsCatalog::factory(10)->create();
     }
 }
