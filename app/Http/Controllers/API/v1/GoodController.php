@@ -260,7 +260,7 @@ class GoodController extends Controller
                     'trademark','model','type','color','series','state_of_conservation','date_acquired','value',
                     'observations']);
                 $goodQuery->with(['goodsCatalog' => function ($goodsCatalogQuery){
-                    $goodsCatalogQuery->select('id','code');
+                    $goodsCatalogQuery->select('id','code','denomination');
                 }]);
             },
             'users'=> function ($userQuery){

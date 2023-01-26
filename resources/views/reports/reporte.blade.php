@@ -222,7 +222,7 @@
                     <td>{{$counter++}}</td>
                     <td>{{$good->goodsCatalog->code}}</td>
                     <td>{{$good->code}}</td>
-                    <td style="text-align: left;">{{$good->description}}</td>
+                    <td style="text-align: left;">{{$good->goodsCatalog->denomination}}</td>
                     <td>{{$good->trademark}}</td>
                     <td>{{$good->model}}</td>
                     <td>{{$good->type}}</td>

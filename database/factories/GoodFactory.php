@@ -22,12 +22,14 @@ class GoodFactory extends Factory
     {
         $goodsCatalogIDs = GoodsCatalog::pluck('id');
         $warehouseIDs = Warehouse::pluck('id');
+
+        $this->faker->addProvider(new \Faker\Provider\es_ES\Color($this->faker));
         return [
             'code' =>  $this->faker->numberBetween(10000000,90000000),
             'description' => $this->faker->words(rand(2,4),true),
-            'trademark' => $this->faker->word(),
-            'model' => $this->faker->word(),
-            'type' => $this->faker->word(),
+//            'trademark' => $this->faker->realText(),
+//            'model' => $this->faker->realText(),
+//            'type' => $this->faker->word(),
             'color' => $this->faker->safeColorName(),
             'series' => $this->faker->hexcolor(),
             'state_of_conservation' => $this->faker->randomElement(['A','B','C']),
