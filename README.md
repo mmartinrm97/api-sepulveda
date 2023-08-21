@@ -1,14 +1,80 @@
-## SIS Sepulveda
-
+## SIS Sepulveda (Backend Side)
 
 <p align="center">
 <img src="https://img.shields.io/badge/license-Apache-green" alt="License"></a>
 <img src="https://img.shields.io/badge/version-1.0-blue" alt="Version"></a>
+<a href="https://zenodo.org/badge/latestdoi/506025421"><img src="https://zenodo.org/badge/506025421.svg" alt="DOI"></a>
 </p>
 
-Software for inventory control in public institutions using Laravel 8 (PHP Framework), Vue js and RESTful API with 
-support for MySQL databases.
+Welcome to the API documentation for SIS Sepulveda (Backend), a comprehensive inventory control software designed for use in
+public institutions.
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+    - [Clone the Project](#clone-the-project)
+    - [Installation](#installation)
+    - [Configuration](#configuration)
+- [Rate Limiting](#rate-limiting)
+- [License](#license)
+
+## Introduction
+
+SIS Sepulveda is an inventory control system designed to streamline inventory management processes in public
+institutions.
+The API provides a flexible and efficient way to interact with inventory items, manage orders, and handle
+user accounts.
+
+## Getting Started
+
+### Clone the Project
+
+To get started, you'll need to clone the SIS Sepulveda repository to your local machine:
+
+```bash
+git clone https://github.com/mmartinrm97/api-sepulveda.git
+
+```
+
+## Installation
+
+Navigate to the project directory and install the project dependencies using Composer:
+
+```bash
+cd api-sepulveda
+composer install
+```
+
+## Configuration
+
+After installing the dependencies, create a copy of the .env.example file and rename it to .env:
+
+```bash
+cp .env.example .env
+```
+
+Generate an application key:
+
+```bash
+php artisan key:generate
+```
+
+Update the .env file with your database and other configuration settings.
+
+Generate the JWT Keyy:
+
+```bash
+php artisan jwt:secret
+```
+
+## Rate Limiting
+To ensure fair usage of the API, rate limiting is applied. Each API key has a specific rate limit. If you exceed the rate limit, you will receive a 429 Too Many Requests response.
 
 ## License
-[Apache](https://choosealicense.com/licenses/apache-2.0/)
+
+This software is licensed under the Apache License 2.0.
+
+For more information about SIS Sepulveda or to report any issues, please contact our support team at
+1470614789@undc.edu.pe
+

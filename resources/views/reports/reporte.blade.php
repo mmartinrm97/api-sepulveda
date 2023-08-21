@@ -149,7 +149,7 @@
 <body>
 <!-- Define header and footer blocks before your content -->
 <header>
-    <strong style="font-size:20px;">REPORTE DE INVENTARIO - {{strtoupper(now()->monthName)}} {{now()->year}}</strong>
+    <strong style="font-size:20px;">INVENTORY REPORT - {{strtoupper(now()->monthName)}} {{now()->year}}</strong>
     <img src="{{asset('sepulveda-black.png')}}" width="5%" style="position: fixed;  top: -60px;" alt="logo"/>
 </header>
 
@@ -162,17 +162,17 @@
         </div>
         <div class="column-footer">
             <p>PROF MARIO LARA DE LA CRUZ</p>
-            <p>SUB DIRECTOR ADMINISTRATIVO</p>
+            <p>DEPUTY ADMINISTRATIVE DIRECTOR</p>
             <p>IEP J. B. SEPÚLVEDA</p>
         </div>
         <div class="column-footer">
             <p>PROF BERNABE DIAZ SAAVEDRA</p>
-            <p>REP. ANTE LOS DOCENTES</p>
+            <p>TEACHER'S REP.</p>
             <p>IEP J. B. SEPÚLVEDA</p>
         </div>
         <div class="column-footer">
             <p>T.A.II. MIGUEL MENDIETA ESPINOZA</p>
-            <p>REPRESENTANTE ADMINISTRATIVO</p>
+            <p>ADMINISTRATIVE REPRESENTATIVE</p>
             <p>IEP J. B. SEPÚLVEDA</p>
         </div>
     </div>
@@ -183,16 +183,16 @@
     @foreach ($warehouses as $warehouse)
         <table style="width:100%; font-size: 12px;" class="sin-bordes">
         <tr>
-            <th>AREA INVENTARIADO:</th>
+            <th>INVENTORY AREA:</th>
             <td>{{$warehouse->description}}</td>
-            <th>BIENES PATRIMONIALES</th>
+            <th>PATRIMONIAL ASSETS</th>
             <td></td>
         </tr>
         <tr>
 
-            <th>USUARIO RESPONSABLE:</th>
+            <th>RESPONSIBLE USER:</th>
             <td>{{$warehouse->users[0]->first_name}} {{$warehouse->users[0]->last_name}}</td>
-            <th>FECHA DE INVENTARIO:</th>
+            <th>INVENTORY DATE:</th>
             <td>{{now()}}</td>
         </tr>
         </table>
@@ -200,19 +200,19 @@
         <table style="font-size:11px" class="happy">
             <thead>
             <tr style="text-align: center;">
-                <th style="width:2%;">N ORDEN</th>
-                <th style="width:9%;">CODIGO PATRIMONIAL</th>
-                <th style="width:7%">CODIGO INVENTARIO</th>
-                <th style="width:32%">DESCRIPCIÓN DEL BIEN</th>
-                <th style="width:5%;">MARCA</th>
-                <th style="width:5%;">MODELO</th>
-                <th style="width:5%;">TIPO</th>
+                <th style="width:2%;">O. NUMBER</th>
+                <th style="width:9%;">PATRIMONIAL CODE</th>
+                <th style="width:7%">INVENTORY CODE</th>
+                <th style="width:32%">ASSET DESCRIPION</th>
+                <th style="width:5%;">BRAND</th>
+                <th style="width:5%;">MODEL</th>
+                <th style="width:5%;">TYPE</th>
                 <th style="width:5%;">COLOR</th>
-                <th style="width:5%;">SERIE</th>
-                <th style="width:5%;">ESTADO CONSERV</th>
-                <th style="width:9%;">FECHA ADQ.</th>
-                <th style="width:9%;">VALOR</th>
-                <th style="width:5%;">OBSERV.</th>
+                <th style="width:5%;">SERIES</th>
+                <th style="width:5%;">STATE</th>
+                <th style="width:9%;">ACQ. DATE</th>
+                <th style="width:9%;">VALUE</th>
+                <th style="width:5%;">OBS.</th>
             </tr>
             </thead>
             {{$counter = 1}}
