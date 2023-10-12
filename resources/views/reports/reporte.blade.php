@@ -149,7 +149,7 @@
 <body>
 <!-- Define header and footer blocks before your content -->
 <header>
-    <strong style="font-size:20px;">INVENTORY REPORT - {{strtoupper(now()->monthName)}} {{now()->year}}</strong>
+    <strong style="font-size:20px;">REPORTE DE INVENTARIO - {{strtoupper(now()->monthName)}} {{now()->year}}</strong>
     <img src="{{asset('sepulveda-black.png')}}" width="5%" style="position: fixed;  top: -60px;" alt="logo"/>
 </header>
 
@@ -162,17 +162,17 @@
         </div>
         <div class="column-footer">
             <p>PROF MARIO LARA DE LA CRUZ</p>
-            <p>DEPUTY ADMINISTRATIVE DIRECTOR</p>
+            <p>SUB DIRECTOR ADMINISTRATIVO</p>
             <p>IEP J. B. SEPÚLVEDA</p>
         </div>
         <div class="column-footer">
             <p>PROF BERNABE DIAZ SAAVEDRA</p>
-            <p>TEACHER'S REP.</p>
+            <p>REP. ANTE LOS DOCENTES</p>
             <p>IEP J. B. SEPÚLVEDA</p>
         </div>
         <div class="column-footer">
             <p>T.A.II. MIGUEL MENDIETA ESPINOZA</p>
-            <p>ADMINISTRATIVE REPRESENTATIVE</p>
+            <p>REPRESENTANTE ADMINISTRATIVO</p>
             <p>IEP J. B. SEPÚLVEDA</p>
         </div>
     </div>
@@ -182,37 +182,37 @@
 <main>
     @foreach ($warehouses as $warehouse)
         <table style="width:100%; font-size: 12px;" class="sin-bordes">
-        <tr>
-            <th>INVENTORY AREA:</th>
-            <td>{{$warehouse->description}}</td>
-            <th>PATRIMONIAL ASSETS</th>
-            <td></td>
-        </tr>
-        <tr>
+            <tr>
+                <th>AREA INVENTARIADO:</th>
+                <td>{{$warehouse->description}}</td>
+                <th>BIENES PATRIMONIALES</th>
+                <td></td>
+            </tr>
+            <tr>
 
-            <th>RESPONSIBLE USER:</th>
-            <td>{{$warehouse->users[0]->first_name}} {{$warehouse->users[0]->last_name}}</td>
-            <th>INVENTORY DATE:</th>
-            <td>{{now()}}</td>
-        </tr>
+                <th>USUARIO RESPONSABLE:</th>
+                <td>{{$warehouse->users[0]->first_name}} {{$warehouse->users[0]->last_name}}</td>
+                <th>FECHA DE INVENTARIO:</th>
+                <td>{{now()}}</td>
+            </tr>
         </table>
 
         <table style="font-size:11px" class="happy">
             <thead>
             <tr style="text-align: center;">
-                <th style="width:2%;">O. NUMBER</th>
-                <th style="width:9%;">PATRIMONIAL CODE</th>
-                <th style="width:7%">INVENTORY CODE</th>
-                <th style="width:32%">ASSET DESCRIPION</th>
-                <th style="width:5%;">BRAND</th>
-                <th style="width:5%;">MODEL</th>
-                <th style="width:5%;">TYPE</th>
+                <th style="width:2%;">N ORDEN</th>
+                <th style="width:9%;">CODIGO PATRIMONIAL</th>
+                <th style="width:7%">CODIGO INVENTARIO</th>
+                <th style="width:32%">DESCRIPCIÓN DEL BIEN</th>
+                <th style="width:5%;">MARCA</th>
+                <th style="width:5%;">MODELO</th>
+                <th style="width:5%;">TIPO</th>
                 <th style="width:5%;">COLOR</th>
-                <th style="width:5%;">SERIES</th>
-                <th style="width:5%;">STATE</th>
-                <th style="width:9%;">ACQ. DATE</th>
-                <th style="width:9%;">VALUE</th>
-                <th style="width:5%;">OBS.</th>
+                <th style="width:5%;">SERIE</th>
+                <th style="width:5%;">ESTADO CONSERV</th>
+                <th style="width:9%;">FECHA ADQ.</th>
+                <th style="width:9%;">VALOR</th>
+                <th style="width:5%;">OBSERV.</th>
             </tr>
             </thead>
             {{$counter = 1}}
@@ -222,7 +222,7 @@
                     <td>{{$counter++}}</td>
                     <td>{{$good->goodsCatalog->code}}</td>
                     <td>{{$good->code}}</td>
-                    <td style="text-align: left;">{{$good->goodsCatalog->denomination}}</td>
+                    <td style="text-align: left;">{{$good->description}}</td>
                     <td>{{$good->trademark}}</td>
                     <td>{{$good->model}}</td>
                     <td>{{$good->type}}</td>
@@ -237,8 +237,8 @@
             </tbody>
         </table>
 
-{{--        <p style="page-break-after: always;">--}}
-{{--        </p>--}}
+        {{--        <p style="page-break-after: always;">--}}
+        {{--        </p>--}}
 
     @endforeach
 
@@ -246,4 +246,3 @@
 
 </body>
 </html>
-

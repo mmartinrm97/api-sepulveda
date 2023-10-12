@@ -237,16 +237,6 @@ class GoodController extends Controller
      */
     public function generateReport(Request $request): \Illuminate\Http\Response
     {
-//
-//        $goods->when($request->filled('search_warehouse'), function ($query) use ($request) {
-//            $query->where('goods.warehouse_id', $request->input('search_warehouse'));
-//        });
-//
-//        $goods->select('goods.*')
-//            ->join('warehouses', 'warehouses.id', '=', 'goods.warehouse_id')
-//            ->orderBy('warehouses.description');
-//
-//        return GoodPDFResource::collection($goods->get());
 
         $warehouses = Warehouse::query();
 
