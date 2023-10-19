@@ -60,13 +60,39 @@ Generate an application key:
 php artisan key:generate
 ```
 
-Update the .env file with your database and other configuration settings.
+Update the .env file with your database and other configuration settings. For example:
+
+```dotenv
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=db_test
+    DB_USERNAME=root
+    DB_PASSWORD=
+```
+
+Update the QUEUE_CONNECTION to redis in the .env file
+
+```dotenv
+    QUEUE_CONNECTION=redis
+```
 
 Generate the JWT Keyy:
 
 ```bash
 php artisan jwt:secret
 ```
+
+Start the server. If you use Laragon you dont need to execute this command:
+```bash
+php artisan serve
+```
+
+Start queue worker:
+```bash
+php artisan queue:work
+```
+
 
 ## Rate Limiting
 To ensure fair usage of the API, rate limiting is applied. Each API key has a specific rate limit. If you exceed the rate limit, you will receive a 429 Too Many Requests response.
