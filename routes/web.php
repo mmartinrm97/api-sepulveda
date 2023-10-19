@@ -1,8 +1,13 @@
 <?php
 
+use App\Jobs\GeneratePDFJob;
+use App\Jobs\MergePDFsJob;
+use App\Models\Good;
 use App\Models\Warehouse;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Webklex\PDFMerger\PDFMerger;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +23,4 @@ use Illuminate\Http\Request;
 Route::get('/', function (Request $request) {
     return view('welcome');
 });
+

@@ -27,7 +27,7 @@ class GoodSeeder extends Seeder
         $currentMonth = now()->month;
 
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i <= 1000; $i++) {
             $goodsCatalog = $goodsCatalogData[array_rand($goodsCatalogData)];
 
             $stateOfConservation = '';
@@ -73,6 +73,8 @@ class GoodSeeder extends Seeder
         foreach ($chunks as $chunk) {
             DB::table('goods')->insert($chunk);
         }
+        $data = [];
+
 
     }
 }

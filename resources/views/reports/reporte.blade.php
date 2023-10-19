@@ -103,7 +103,7 @@
         .happy > tbody > tr > th,
         .happy > thead > tr > td,
         .happy > thead > tr > th,
-        .happy{
+        .happy {
             text-align: center;
             border: 1px solid black;
             border-collapse: collapse;
@@ -180,67 +180,65 @@
 
 <!-- Wrap the content of your PDF inside a main tag -->
 <main>
-    @foreach ($warehouses as $warehouse)
-        <table style="width:100%; font-size: 12px;" class="sin-bordes">
-            <tr>
-                <th>AREA INVENTARIADO:</th>
-                <td>{{$warehouse->description}}</td>
-                <th>BIENES PATRIMONIALES</th>
-                <td></td>
+    <table style="width:100%; font-size: 12px;" class="sin-bordes">
+        <tr>
+            <th>AREA INVENTARIADO:</th>
+            <td>{{$warehouse->description}}</td>
+            <th>BIENES PATRIMONIALES</th>
+            <td></td>
+        </tr>
+        <tr>
+
+            <th>USUARIO RESPONSABLE:</th>
+            <td>{{$warehouse->users[0]->first_name}} {{$warehouse->users[0]->last_name}}</td>
+            <th>FECHA DE INVENTARIO:</th>
+            <td>{{now()}}</td>
+        </tr>
+    </table>
+
+    <table style="font-size:11px" class="happy">
+        <thead>
+        <tr style="text-align: center;">
+            <th style="width:2%;">N ORDEN</th>
+            <th style="width:9%;">CODIGO PATRIMONIAL</th>
+            <th style="width:7%">CODIGO INVENTARIO</th>
+            <th style="width:40%">DESCRIPCIÓN DEL BIEN</th>
+            <th style="width:5%;">MARCA</th>
+            <th style="width:5%;">MODELO</th>
+            <th style="width:5%;">TIPO</th>
+            <th style="width:5%;">COLOR</th>
+            <th style="width:5%;">SERIE</th>
+            <th style="width:5%;">ESTADO CONSERV</th>
+            <th style="width:9%;">FECHA ADQ.</th>
+            <th style="width:9%;">VALOR</th>
+            <th style="width:3%;">OBS.</th>
+        </tr>
+        </thead>
+        {{$counter = 1}}
+        <tbody>
+        @foreach($goods as $good)
+            <tr style="text-align: center">
+                <td>{{$counter++}}</td>
+                <td>{{$good->goodsCatalog->code}}</td>
+                <td>{{$good->code}}</td>
+                <td style="text-align: left;">{{$good->description}}</td>
+                <td>{{$good->trademark}}</td>
+                <td>{{$good->model}}</td>
+                <td>{{$good->type}}</td>
+                <td>{{$good->color}}</td>
+                <td>{{$good->series}}</td>
+                <td>{{$good->state_of_conservation}}</td>
+                <td>{{$good->date_acquired}}</td>
+                <td>{{$good->value}}</td>
+                <td>{{$good->observations}}</td>
             </tr>
-            <tr>
-
-                <th>USUARIO RESPONSABLE:</th>
-                <td>{{$warehouse->users[0]->first_name}} {{$warehouse->users[0]->last_name}}</td>
-                <th>FECHA DE INVENTARIO:</th>
-                <td>{{now()}}</td>
-            </tr>
-        </table>
-
-        <table style="font-size:11px" class="happy">
-            <thead>
-            <tr style="text-align: center;">
-                <th style="width:2%;">N ORDEN</th>
-                <th style="width:9%;">CODIGO PATRIMONIAL</th>
-                <th style="width:7%">CODIGO INVENTARIO</th>
-                <th style="width:32%">DESCRIPCIÓN DEL BIEN</th>
-                <th style="width:5%;">MARCA</th>
-                <th style="width:5%;">MODELO</th>
-                <th style="width:5%;">TIPO</th>
-                <th style="width:5%;">COLOR</th>
-                <th style="width:5%;">SERIE</th>
-                <th style="width:5%;">ESTADO CONSERV</th>
-                <th style="width:9%;">FECHA ADQ.</th>
-                <th style="width:9%;">VALOR</th>
-                <th style="width:5%;">OBSERV.</th>
-            </tr>
-            </thead>
-            {{$counter = 1}}
-            <tbody>
-            @foreach($warehouse->goods as $good)
-                <tr style="text-align: center">
-                    <td>{{$counter++}}</td>
-                    <td>{{$good->goodsCatalog->code}}</td>
-                    <td>{{$good->code}}</td>
-                    <td style="text-align: left;">{{$good->description}}</td>
-                    <td>{{$good->trademark}}</td>
-                    <td>{{$good->model}}</td>
-                    <td>{{$good->type}}</td>
-                    <td>{{$good->color}}</td>
-                    <td>{{$good->series}}</td>
-                    <td>{{$good->state_of_conservation}}</td>
-                    <td>{{$good->date_acquired}}</td>
-                    <td>{{$good->value}}</td>
-                    <td>{{$good->observations}}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-
-        {{--        <p style="page-break-after: always;">--}}
-        {{--        </p>--}}
-
-    @endforeach
+{{--            if $counter is multiple of 20 then insert a page break--}}
+            @if($counter % 20 == 0)
+                <div class="page-break"></div>
+            @endif
+        @endforeach
+        </tbody>
+    </table>
 
 </main>
 

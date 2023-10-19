@@ -18,7 +18,6 @@ return new class extends Migration
 
             $table->string('description');
             $table->boolean('is_active')->default(false);
-
             $table->timestamps();
         });
     }

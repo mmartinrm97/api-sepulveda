@@ -6,14 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\StoreGoodRequest;
 use App\Http\Requests\v1\UpdateGoodRequest;
 use App\Http\Resources\v1\GoodResource;
+use App\Jobs\GeneratePDFJob;
+use App\Jobs\MergePDFsJob;
 use App\Models\Good;
 use App\Models\Warehouse;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class GoodController extends Controller
 {
@@ -233,39 +237,83 @@ class GoodController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
+     * @throws \Throwable
      */
-    public function generateReport(Request $request): \Illuminate\Http\Response
+    public function generateReport(Request $request): JsonResponse
     {
+        $searchWarehouseId = $request->input('search_warehouse_id');
 
-        $warehouses = Warehouse::query();
+        // Construye la consulta de almacenes
+        $warehousesQuery = Warehouse::with(['users']);
 
-        $warehouses->when($request->filled('search_warehouse_id'), function ($query) use ($request) {
-            $query->where('warehouses.id', $request->input('search_warehouse_id'));
+        // Si se proporciona search_warehouse_id, filtra por ese almacén
+        if ($searchWarehouseId) {
+            $warehousesQuery->where('id', $searchWarehouseId);
+        }
+
+        // Obtén los almacenes según la consulta
+        $warehouses = $warehousesQuery->get();
+
+        // generate a time value
+        $time = time();
+        $jobs = [];
+
+        $warehouses->each(function ($warehouse) use ($time, &$jobs) {
+            // Aquí puedes ajustar la cantidad de bienes por página
+            $goodsPerPage = 23; // Por ejemplo, paginación de 23 bienes por página
+
+            // obtener los bienes paginados, no los almacenes
+            $goods = Good::where('warehouse_id', $warehouse->id)->paginate($goodsPerPage);
+
+
+            $currentPage = $goods->currentPage(); // Obtén la página actual de bienes
+
+            //ciclo para generar informes PDF de bienes
+            while ($currentPage <= $goods->lastPage()) {
+                $data = [
+                    'warehouse' => $warehouse,
+                    'goods' => $goods,
+                    'time' => $time
+                ];
+
+                $jobs [] = new GeneratePDFJob($data);
+
+                // get the next page of goods
+                $goods = Good::where('warehouse_id', $warehouse->id)->paginate($goodsPerPage, ['*'], 'page', $currentPage + 1);
+                $currentPage = $goods->currentPage(); // Obtén la página actual de bienes
+            }
+
         });
 
-        $warehouses->with([
-            'goods' => function($goodQuery){
-                $goodQuery->select(['id','description','warehouse_id','goods_catalog_id', 'code',
-                    'trademark','model','type','color','series','state_of_conservation','date_acquired','value',
-                    'observations']);
-                $goodQuery->with(['goodsCatalog' => function ($goodsCatalogQuery){
-                    $goodsCatalogQuery->select('id','code','denomination');
-                }]);
-            },
-            'users'=> function ($userQuery){
-                $userQuery->select('users.id','first_name','last_name');
-            }
+        $batch = Bus::batch($jobs)->name('Reporte ' . $time);
+        $batch->add(new MergePDFsJob(['time' => $time]));
+        $batch = $batch->dispatch();
+
+        return response()->json([
+            'data' => [
+                'message' => 'Trabajos de informe generados correctamente',
+                'batch' => $batch
+            ]
         ]);
+    }
 
+    public function downloadPDFReport(Request $request): BinaryFileResponse|JsonResponse
+    {
+        $time = $request->input('report_id');
+        // Verifica si el archivo PDF combinado existe
+        $mergedFilePath = storage_path("app/public/reports/{$time}/report_{$time}.pdf");
 
-        $data = [
-            'titulo' => 'Styde.net',
-            'warehouses' => $warehouses->get()
+        if (!File::exists($mergedFilePath)) {
+            return response()->json(['error' => 'El archivo no existe.'], 404);
+        }
+
+        // Define el encabezado de la respuesta para la descarga del archivo
+        $headers = [
+            'Content-Type' => 'application/pdf',
         ];
 
-        return PDF::loadView('reports.reporte', $data)
-            ->setPaper('a4', 'landscape')
-            ->stream('archivo.pdf');
+        // Descarga el archivo PDF utilizando una BinaryFileResponse
+        return response()->download($mergedFilePath, "report.pdf", $headers);
     }
 }

@@ -9,6 +9,8 @@ use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\WarehouseController;
 use App\Http\Controllers\API\v2\GraphReportController;
 use App\Http\Controllers\API\v2\RoleController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,7 +46,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('warehouses/list', [WarehouseController::class, 'indexAll'])->name('warehouses.list');
     Route::apiResource('warehouses', WarehouseController::class);
 
-    Route::get('reports/generate-reports', [GoodController::class, 'generateReport']);
+    Route::get('reports/generate-pdf-report', [GoodController::class, 'generateReport']);
+    Route::get('reports/download-pdf-report', [GoodController::class, 'downloadPDFReport']);
     Route::get('goods/list', [GoodController::class, 'list']);
     Route::apiResource('goods', GoodController::class);
 
@@ -63,5 +66,56 @@ Route::controller(UserAuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 
+});
+
+
+// Route to get the batch by Id
+Route::get('/batch', function (Request $request) {
+    $bus = Bus::findBatch($request->input('batch_id'));
+
+    //if bus is null return 404
+    if ($bus === null) {
+        return response()->json([
+            'message' => 'Batch not found'
+        ], 404);
+    }
+
+    //if bus is not null return the batch
+    return response()->json([
+        'data' => $bus
+    ]);
+});
+
+// Route to cancel the batch by Id
+Route::delete('/batch', function (Request $request) {
+    $bus = Bus::findBatch($request->input('batch_id'));
+
+    //if bus is null return 404
+    if ($bus === null) {
+        return response()->json([
+            'message' => 'Batch not found'
+        ], 404);
+    }
+
+    //check if batch is already cancelled
+    if ($bus->cancelled()) {
+        return response()->json([
+            'message' => 'Batch already cancelled'
+        ], 400);
+    }
+
+    //if bus is not null return the batch
+    try {
+
+        $bus->cancel();
+
+        return response()->json([
+            'message' => 'Batch cancelled'
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'message' => 'Batch could not be cancelled'
+        ], 500);
+    }
 });
 

@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('queue:prune-batches --hours=48 --unfinished=72 --cancelled=72')->daily();
     }
 
     /**
