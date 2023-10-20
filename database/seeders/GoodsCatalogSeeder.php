@@ -27,7 +27,7 @@ class GoodsCatalogSeeder extends Seeder
 
         $csvFile = fopen(base_path('database/seeders/data/CatalogoDataSBN.csv'), 'r');
         $firstLine = true;
-        $goodsData = [];
+        $goodCatalogData = [];
 
         while (($data = fgetcsv($csvFile, 2000, ";")) !== FALSE) {
             if ($firstLine) {
@@ -37,7 +37,7 @@ class GoodsCatalogSeeder extends Seeder
             $goodGroup = $goodGroups->firstWhere('description', $data[3]);
             $goodClass = $goodClasses->firstWhere('description', $data[4]);
 
-            $goodsData[] = [
+            $goodCatalogData[] = [
                 'item' => $data[0],
                 'code' => $data[1],
                 'denomination' => $data[2],
@@ -51,7 +51,7 @@ class GoodsCatalogSeeder extends Seeder
         fclose($csvFile);
 
         //chunk de $itemsCatalogData to insert on CatalogItem model
-        $chunks = array_chunk($goodsData, 500);
+        $chunks = array_chunk($goodCatalogData, 500);
         foreach ($chunks as $chunk) {
             GoodsCatalog::insert($chunk);
         }
